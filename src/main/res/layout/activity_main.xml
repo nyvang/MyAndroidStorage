@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D4E4E"
+    tools:context=".MainActivity">
+
+    <TableLayout
+        android:id="@+id/bottom_table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:id="@+id/table_row_1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/quarter"
+            android:layout_margin="8dp"
+            android:divider="@color/colorPrimaryDark"
+            android:dividerPadding="8dp">
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="My Android Storage"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textSize="30sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/table_row_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:outlineAmbientShadowColor="#FF0000"
+            android:outlineProvider="bounds">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/input_view"
+                android:layout_width="376dp"
+                android:layout_height="215dp"
+                android:layout_marginLeft="16dp"
+                app:cardBackgroundColor="#88DAFF"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:contentPadding="8dp" >
+
+                <TableLayout
+                    android:id="@+id/input_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableRow
+                        android:id="@+id/input_row_1"
+                        android:layout_width="match_parent"  >
+
+                        <TextView
+                            android:id="@+id/name_label_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="5"
+                            android:text="Name :" />
+
+                        <EditText
+                            android:id="@+id/name_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="13"
+                            android:hint="Name goes here ;)"
+                            android:inputType="textPersonName"
+                            android:textSize="12dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/input_row_2"
+                        android:layout_width="match_parent" >
+
+                        <TextView
+                            android:id="@+id/address_label_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Address :" />
+
+                        <EditText
+                            android:id="@+id/address_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="Postal address"
+                            android:ems="13"
+                            android:inputType="textPostalAddress"
+                            android:textSize="12dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/input_row_3"
+                        android:layout_width="match_parent"  >
+
+                        <TextView
+                            android:id="@+id/phone_label_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Phone :" />
+
+                        <EditText
+                            android:id="@+id/phone_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="phone"
+                            android:textSize="12dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/input_row_4"
+                        android:layout_width="match_parent"  >
+
+                        <TextView
+                            android:id="@+id/email_label_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="E-mail :" />
+
+                        <EditText
+                            android:id="@+id/email_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textEmailAddress"
+                            android:textSize="12dp" />
+
+                    </TableRow>
+                </TableLayout>
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/table_row_3"
+            android:layout_width="376dp"
+            android:layout_height="50dp">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/button_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#88DAFF"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:contentPadding="8dp" >
+
+                <ImageButton
+                    android:id="@+id/button_reset"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:onClick="onResetButtonClicked"
+                    app:srcCompat="@android:drawable/ic_delete" />
+
+                <ImageButton
+                    android:id="@+id/button_save"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="230dp"
+                    android:onClick="onSaveButtonClick"
+                    app:srcCompat="@android:drawable/ic_input_add" />
+
+
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/table_row_4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/quarter" >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/output_view"
+                android:layout_width="376dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="#88DAFF"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:contentPadding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/output_header_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Data saved:" />
+
+                    <TextView
+                        android:id="@+id/output_name_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/output_address_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/output_phone_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/output_email_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
