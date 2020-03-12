@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MyAndroidStorage</string>
+    <string name="ui_sucessful_data_save">\"Data successfully saved: \"</string>
+    <string name="error_empty_fields">All fields are empty...</string>
+    <string name="user_action_fill_in_fields">Please fill in the fields</string>
+    <string name="ui_field_name">Name</string>
+    <string name="ui_field_address">, Address</string>
+    <string name="ui_field_phone">, Phone</string>
+    <string name="ui_field_email">, E-mail</string>
+    <string name="warning_fields_empty">\"An error occurred in the following fields: \"</string>
+    <string name="info_all_fields_reset">All fields cleared!</string>
 </resources>

@@ -24,4 +24,6 @@ public class ExampleInstrumentedTest {
 
         assertEquals("dk.nyvang.android.myandroidstorage", appContext.getPackageName());
     }
+
+
 }
