@@ -9,4 +9,8 @@
     <string name="ui_field_email">, E-mail</string>
     <string name="warning_fields_empty">\"An error occurred in the following fields: \"</string>
     <string name="info_all_fields_reset">All fields cleared!</string>
+
+
+    <string name="fileName">datafile.txt</string>
+
 </resources>

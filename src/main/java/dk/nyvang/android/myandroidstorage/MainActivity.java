@@ -1,10 +1,8 @@
 package dk.nyvang.android.myandroidstorage;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,37 +10,40 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import dk.nyvang.android.myandroidstorage.handlers.DataHandler;
-import dk.nyvang.android.myandroidstorage.utills.ErrorLevel;
 import dk.nyvang.android.myandroidstorage.utills.Lo;
 import dk.nyvang.android.myandroidstorage.utills.LogLevels;
 
+/**
+ * MyAndroidStorage application.
+ *
+ * This app is an example on how to create a few text fields, save the input data in the internal
+ * app storage, and to be able to get the data again.
+ *
+ * I have added several tests to run on the MainActivity to actually prove to myself,
+ * if everything is working as expected.
+ *
+ * @author NE0V
+ * @version 1.2
+ */
 public class MainActivity extends AppCompatActivity {
 
     // Enable global log statements
+    // TODO : Disable prior to release
     public static final boolean IS_GLOBAL_APPLICATION_LOGGING_ACTIVE = true;
-
-    // Error levels
-    private static final int NO_ERRORS       = 0;
-    private static final int ONE_ERROR       = 1;
-    private static final int TWO_ERRORS      = 2;
-    private static final int THREE_ERRORS    = 3;
-
-    // TextFields (UI)
-    EditText nameField;
-    EditText addressField;
-    EditText phoneField;
-    EditText emailField;
 
     // Java.lang.stuff
     private List<String> dataList;
     private int errorLevel;
-    private StringBuilder sb;
+    private StringBuilder faultyFields;
     // This.app
     private DataHandler dataHandler;
 
+    /**
+     * App entry - starts the app
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,97 +51,109 @@ public class MainActivity extends AppCompatActivity {
 
         dataList = new ArrayList<>();
         dataHandler = new DataHandler();
-        sb = new StringBuilder();
+        faultyFields = new StringBuilder();
     }
 
-    // TODO: How about making this method a little shorter........
+    /**
+     * Saves the data (text) from the UI´s TextEdit fields after validating the input values.
+     * The valid data is added to a list and passed on to the <code>DataHandler</code> which then,
+     * in turn, return a copy of the saved data.
+     * @param view View - the current view
+     */
     public void onSaveButtonClick(View view) {
 
-        nameField = (EditText) findViewById(R.id.name_edit);
-        addressField = (EditText) findViewById(R.id.address_edit);
-        phoneField = (EditText) findViewById(R.id.phone_edit);
-        emailField = (EditText) findViewById(R.id.email_edit);
+        EditText nameField = findViewById(R.id.name_edit);
+        EditText addressField = findViewById(R.id.address_edit);
+        EditText phoneField = findViewById(R.id.phone_edit);
+        EditText emailField = findViewById(R.id.email_edit);
 
-        toggleOutputContainer();
         errorLevel = 0;
 
-        sb.delete(0, sb.length()+1);
-        sb.append(getString(R.string.warning_fields_empty));
+        faultyFields.delete(0, faultyFields.length()+1);
+        faultyFields.append(getString(R.string.warning_fields_empty));
 
         if(checkInput(nameField)) {
             dataList.add(nameField.getText().toString());
         } else {
-            sb.append(getString(R.string.ui_field_name));
+            faultyFields.append(getString(R.string.ui_field_name));
             errorLevel++;
         }
         if(checkInput(addressField)) {
             dataList.add(addressField.getText().toString());
         } else {
-            sb.append(getString(R.string.ui_field_address));
+            faultyFields.append(getString(R.string.ui_field_address));
             errorLevel++;
         }
         if(checkInput(phoneField)) {
             dataList.add(phoneField.getText().toString());
         } else {
-            sb.append(getString(R.string.ui_field_phone));
+            faultyFields.append(getString(R.string.ui_field_phone));
             errorLevel++;
         }
         if(checkInput(emailField)) {
             dataList.add(emailField.getText().toString());
         } else {
-            sb.append(getString(R.string.ui_field_email));
+            faultyFields.append(getString(R.string.ui_field_email));
             errorLevel++;
         }
 
-        if(errorLevel == ErrorLevel.FOUR_ERRORS) {
-            Toast.makeText(this, R.string.user_action_fill_in_fields, Toast.LENGTH_LONG).show();
-            Lo.g(LogLevels.LEVEL_DEBUG, getOrigin(), "ErrorLevel (Should be 4)= " + errorLevel );
-            throw new InputVoidException(getString(R.string.error_empty_fields));
+        if(errorLevel >= 1) {
+            Toast.makeText(
+                    this,
+                    R.string.user_action_fill_in_fields + "\n" + faultyFields,
+                    Toast.LENGTH_LONG
+            ).show();
+
+            Lo.g(LogLevels.LEVEL_WARNING, getOrigin(),
+                    "ErrorLevel (Should be 0)= " + errorLevel + "\n" + faultyFields );
         } else {
-            Lo.g(LogLevels.LEVEL_DEBUG, getOrigin(), "ErrorLevel (should be below 4)= " + errorLevel );
+
             String result = dataHandler.saveDataToFile(this, dataList);
 
-            Toast.makeText(this, getString(R.string.ui_sucessful_data_save) + result, Toast.LENGTH_LONG).show();
+            if(!result.isEmpty()) {
+                Toast.makeText(this,
+                        getString(R.string.ui_sucessful_data_save) + result,
+                        Toast.LENGTH_LONG
+                ).show();
 
-            TextView outputTextView = (TextView) findViewById(R.id.output_name_text_view);
-            outputTextView.setText(result);
-        }
-    }
-
-    private String getOrigin() {
-        return "Package-> " + this.getPackageName() + "\n" + "Class-> " + this.getLocalClassName();
-    }
-
-    public void onResetButtonClick(View view) {
-        TextView outputTextView = (TextView) findViewById(R.id.output_name_text_view);
-        outputTextView.setText("");
-
-        if (null != nameField) nameField.getText().clear();
-        if (null != addressField) addressField.getText().clear();
-        if (null != phoneField) phoneField.getText().clear();
-        if (null != emailField) emailField.getText().clear();
-
-        Toast.makeText(this, R.string.info_all_fields_reset, Toast.LENGTH_SHORT).show();
-    }
-
-    public void toggleOutputContainer() {
-        CardView outputContainer = (CardView) findViewById(R.id.output_view);
-
-        if(outputContainer.getVisibility() != View.VISIBLE) {
-            outputContainer.setVisibility(View.VISIBLE);
-        } else {
-            outputContainer.setVisibility(View.INVISIBLE);
+                TextView outputTextView = findViewById(R.id.output_name_text_view);
+                outputTextView.setText(result);
+            }
         }
     }
 
     /**
-     * Basic field validation, that checks for empty fields
+     * Responsible for reading the internal storage of the app, and to present the user
+     * with this data by adding it to the output text view
+     * @param view View - the current view
+     */
+    public void onGetDataButtonClick(View view) {
+        TextView outputTextView = findViewById(R.id.output_name_text_view);
+        outputTextView.setText("");
+        String savedData = dataHandler.readDataFromFile(this);
+
+        outputTextView.setText(savedData);
+        Toast.makeText(this, savedData, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Basic field validation, that checks for empty field.
+     * Called from the onSaveButtonClick method
      * @param field - the Input field
      * @return true if ok, false if error
      */
     private boolean checkInput(EditText field) {
         // TODO: Expand the validation to actually validate field data, and not just for empty fields.
         //  This, however, is not the idea with the app. This is to play around with storage of data in files
-        return "" == field.getText().toString();
+        return "" != field.getText().toString();
+    }
+
+    /**
+     * Simple function for improved readability on log statements.
+     * Adds package name and class name for easy searching through the log.
+     * @return String - "Package-name and Class-name"
+     */
+    private String getOrigin() {
+        return "Package-> " + this.getPackageName() + "\n" + "Class-> " + this.getLocalClassName();
     }
 }

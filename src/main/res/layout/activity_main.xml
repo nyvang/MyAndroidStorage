@@ -169,8 +169,8 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:onClick="onResetButtonClick"
-                    app:srcCompat="@android:drawable/ic_delete" />
+                    android:onClick="onGetDataButtonClick"
+                    app:srcCompat="@android:drawable/ic_menu_save" />
 
                 <ImageButton
                     android:id="@+id/button_save"
@@ -195,7 +195,7 @@
                 android:layout_height="150dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:cardBackgroundColor="#88DAFF"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"

@@ -2,9 +2,11 @@ package dk.nyvang.android.myandroidstorage.handlers;
 
 import android.content.Context;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -33,13 +35,43 @@ public class DataHandler {
             fos.write(fileContents.getBytes());
             fos.close();
 
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
         return fileContents;
+    }
+
+    /**
+     * Find and return the data saved to the internal storage of the Android app.
+     *
+     * @param context - Context, the current context of the app
+     * @return String - the data previously saved by <code>saveDataToFile</code>
+     */
+    public String readDataFromFile(Context context) {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader inputStreamReader;
+        BufferedReader bufferedReader;
+
+        try (FileInputStream fileInputStream = context.openFileInput(FILE_NAME)) {
+
+            inputStreamReader = new InputStreamReader(fileInputStream);
+            bufferedReader = new BufferedReader(inputStreamReader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            System.out.println(sb);
+
+            bufferedReader.close();
+            inputStreamReader.close();
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        return sb.toString();
     }
 
 }
