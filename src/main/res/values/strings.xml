@@ -11,6 +11,6 @@
     <string name="info_all_fields_reset">All fields cleared!</string>
 
 
-    <string name="fileName">datafile.txt</string>
+    <string name="no_value"></string>
 
 </resources>

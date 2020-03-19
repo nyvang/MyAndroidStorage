@@ -1,12 +1,17 @@
 package dk.nyvang.android.myandroidstorage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
     // This.app
     private DataHandler dataHandler;
 
+    private TextView outputTextView;
+
     /**
-     * App entry - starts the app
-     * @param savedInstanceState
+     * App entry
+     * @param savedInstanceState Bundle of the potentially saved instance (Nullable)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         dataList = new ArrayList<>();
         dataHandler = new DataHandler();
         faultyFields = new StringBuilder();
+
+        outputTextView = findViewById(R.id.output_name_text_view);
     }
 
     /**
@@ -98,28 +107,71 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(errorLevel >= 1) {
-            Toast.makeText(
-                    this,
-                    R.string.user_action_fill_in_fields + "\n" + faultyFields,
-                    Toast.LENGTH_LONG
-            ).show();
+            createToast(0, R.string.user_action_fill_in_fields, faultyFields.toString());
 
             Lo.g(LogLevels.LEVEL_WARNING, getOrigin(),
                     "ErrorLevel (Should be 0)= " + errorLevel + "\n" + faultyFields );
         } else {
+            saveData(dataList);
+        }
+    }
 
-            String result = dataHandler.saveDataToFile(this, dataList);
+    /**
+     * Create and show toasts to the user.
+     * Implemented to shorten <code>onSaveButtonClick</code> and thereby to maintain the highest
+     * readability possible.
+     * @since 1.2.1
+     * @param level - int - the level determine whether the toast is an Error (0) or Info (default)
+     *              The switch statement makes it possible to add more levels with minimum code.
+     * @param resource - int - the resource is a reference to the R-class of the app, where the
+     *                 Strings is maintained.
+     * @param extraInfo - String (Nullable) - any extra info not contained in the R-class,
+     *                  can be added here
+     */
+    private void createToast(@NonNull int level, @NonNull int resource, @Nullable String extraInfo) {
 
-            if(!result.isEmpty()) {
-                Toast.makeText(this,
-                        getString(R.string.ui_sucessful_data_save) + result,
+        switch (level) {
+            case 0: // Error
+                Toast.makeText(
+                        this,
+                        resource + "\n" + extraInfo,
                         Toast.LENGTH_LONG
                 ).show();
 
-                TextView outputTextView = findViewById(R.id.output_name_text_view);
-                outputTextView.setText(result);
-            }
+            default: // Success
+                Toast.makeText(
+                        this,
+                        resource + extraInfo,
+                        Toast.LENGTH_LONG
+                ).show();
         }
+    }
+
+    /**
+     * Handles the actual save of the user entered data
+     * @since 1.2.1
+     * @param dataList - ArrayList<String> containing the combined data from the input fields.
+     */
+    @NotNull
+    private void saveData(@NonNull List<String> dataList) {
+
+        String result = dataHandler.saveDataToFile(this, dataList);
+
+        if(!result.isEmpty()) {
+            createToast(1, R.string.user_action_fill_in_fields, result);
+            setTextViewText(outputTextView, result);
+        }
+    }
+
+    /**
+     * Called in case of error in the UI, and is responsible for informing the user of any errors
+     * in the fields.
+     * @since 1.2.1
+     * @param textField
+     * @param textToBeSet
+     */
+    private void setTextViewText(@NotNull TextView textField, @NonNull String textToBeSet) {
+        textField.setText(textToBeSet);
     }
 
     /**
@@ -128,21 +180,19 @@ public class MainActivity extends AppCompatActivity {
      * @param view View - the current view
      */
     public void onGetDataButtonClick(View view) {
-        TextView outputTextView = findViewById(R.id.output_name_text_view);
-        outputTextView.setText("");
+        setTextViewText(outputTextView, "");
         String savedData = dataHandler.readDataFromFile(this);
-
-        outputTextView.setText(savedData);
-        Toast.makeText(this, savedData, Toast.LENGTH_SHORT).show();
+        setTextViewText(outputTextView, savedData);
+        createToast(1, R.string.no_value, savedData);
     }
 
     /**
      * Basic field validation, that checks for empty field.
      * Called from the onSaveButtonClick method
-     * @param field - the Input field
+     * @param field - EditText - the Input field
      * @return true if ok, false if error
      */
-    private boolean checkInput(EditText field) {
+    private boolean checkInput(@NotNull EditText field) {
         // TODO: Expand the validation to actually validate field data, and not just for empty fields.
         //  This, however, is not the idea with the app. This is to play around with storage of data in files
         return "" != field.getText().toString();

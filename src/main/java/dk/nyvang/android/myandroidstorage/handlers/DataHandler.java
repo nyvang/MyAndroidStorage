@@ -2,6 +2,8 @@ package dk.nyvang.android.myandroidstorage.handlers;
 
 import android.content.Context;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,7 +24,7 @@ public class DataHandler {
      * that can be written to a file by a stream
      * @param data
      */
-    public String saveDataToFile(Context context, List<String> data) {
+    public String saveDataToFile(Context context, @NotNull List<String> data) {
         StringBuilder sb = new StringBuilder();
                 for (int i = 0; i<data.size(); i++) {
             sb.append(data.get(i));
