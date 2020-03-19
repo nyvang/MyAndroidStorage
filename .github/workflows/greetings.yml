@@ -1,0 +1,16 @@
+name: Greetings
+
+on: [pull_request, issues, push ]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'New issue created, thanks!'' first issue'
+        pr-message: 'Hell yeah! Thanks for your contribution !'' first pr'
+        push-message: 'Hey, and welcome to the MyAndroidStorage repo. Your cointribution is greatly appreciated :)'' first push'
+      
+      
